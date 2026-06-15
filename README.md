@@ -4,7 +4,7 @@ Efficient Entity Segmentation with Mamba-Driven Lightweight Design
 This project offers an implementation of the paper, "[MIFA2Former]". 
 
 <div align="center">
-  <img src="main_arch_v21.png" width="90%"/>
+  <img src="main_arch_v3.png" width="90%"/>
 </div><br/>
 
 ## News
