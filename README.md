@@ -23,15 +23,50 @@ This project offers an implementation of the paper, "[MIFA2Former]".
 (2) ADE20K
 | Alg | pre Train Data | Model and Config Url |
 | ------| ------| ------|
-| MIFA2Former | coco  | [Google Drive](-) |
-| MIFA2Former | coco | [Google Drive](-) |
+| MIFA2Former | coco  | [Google Drive](will be soon) |
+| MIFA2Former | coco | [Google Drive](will be soon) |
 
 
 (3) CityScape
 | Alg | pre Train Data | Model and Config Url |
 | ------| ------| ------|
-| MIFA2Former | coco  | [Google Drive](-) |
-| MIFA2Former | coco | [Google Drive](-) |
+| MIFA2Former | coco  | [Google Drive](will be soon) |
+| MIFA2Former | coco | [Google Drive](will be soon) |
+
+
+## Comparison of Different Models on COCO Entity
+with Parameters
+<div align="center">
+  <img src="ap-params-double.png" width="90%"/>
+</div><br/>
+
+
+| Method | Backbone | Train Step(COCO) | $AP^e$ $\uparrow$ | Train Step(EntitySeg) | $AP_L^e$ $\uparrow$ | Res. | Params (M) | Venue |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| DeeperLab$^{**}$ [1] | R101 | 5w | 27.8 | 5w | 32.1 | $1024^2$ | 112.0 | *CVPR19* |
+| UPSNet$^{**}$ [2] | -- | 5w | 28.1 | 5w | 32.5 | $1024^2$ | 45.0 | *CVPR19* |
+| Panoptic-DeepLab$^{**}$ [3] | -- | 5w | 28.5 | 5w | 33.0 | $1024^2$ | 46.7 | *CVPR20* |
+| EfficientPS$^{**}$ [4] | -- | 5w | 29.2 | 5w | 33.8 | $1024^2$ | 41.0 | *IJCV21* |
+| U2Net-L$^{**}$ [5] | -- | 5w | 27.5 | 5w | 31.9 | $1024^2$ | 44.0 | *PR2022* |
+| SeaFormer(L)$^{**}$ [6] | -- | 5w | 29.7 | 5w | 34.4 | $1024^2$ | 36.0 | *ICLR23* |
+| SeaFormer(L)++$^{**}$ [7] | -- | 5w | 30.3 | 5w | 35.1 | $1024^2$ | 36.0 | *IJCV25* |
+| SegMAN(B)$^{**}$ [8] | -- | 5w | 33.3 | 5w | 37.1 | $1024^2$ | 51.8 | *CVPR25* |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| FCOS-Seg [9] | R50 | 27w | 28.3 | -- | -- | $800\times1333$ | -- | *CVPR22* |
+| OpenEntity [10] | R50 | 9w | 29.8 | -- | -- | $800\times1333$ | 40.5 | *TPAMI22* |
+| OpenEntity-R50 [10] | R50 | 27w | 31.8 | -- | -- | $800\times1333$ | 40.5 | *TPAMI22* |
+| OpenEntity-R101 [10] | R101 | 9w | 31.0 | -- | -- | $800\times1333$ | 59.4 | *TPAMI22* |
+| OpenEntity [10] | R101 | 27w | 33.2 | -- | -- | $800\times1333$ | 59.4 | *TPAMI22* |
+| OpenEntity [10] | R101-DCNv2 | 27w | 35.5 | -- | -- | $800\times1333$ | 60.2 | *TPAMI22* |
+| OpenEntity-T [10] | Swin-T | 9w | 33.0 | -- | -- | $800\times1333$ | 42.1 | *TPAMI22* |
+| OpenEntity-MiT [10] | MiT-b0 | 9w | 28.8 | -- | -- | $800\times1333$ | -- | *TPAMI22* |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Mask2Former [11] | R50 | 5w | 30.1 | 5w | 35.2 | $1024^2$ | 44.0 | *CVPR22* |
+| Mask2Former [11] | Swin-T | 5w | 33.8 | 5w | 38.8 | $1024^2$ | 47.4 | *CVPR22* |
+| Mask2Former [11] | Swin-B | 5w | $\underline{38.6}$ | 5w | $\underline{42.1}$ | $1024^2$ | 107 | *CVPR22* |
+| CropFormer [12] | Swin-T | 5w | 37.4 | 5w | 40.6 | $1024^2$ | 49.0 | *ICCV23* |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **MI2Former** | **Mifa-T** | 5w | **40.3** | 5w | **42.70** | $1024^2$ | 44.64 | **Ours** |
 
 ## Data
 #### Coco entity dataset
