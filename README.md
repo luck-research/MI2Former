@@ -1,4 +1,4 @@
-# Mamba2Former
+# MI2Former
 Efficient Entity Segmentation with Mamba-Driven Lightweight Design
 
 This project offers an implementation of the paper, "[MIFA2Former]". 
@@ -12,7 +12,7 @@ This project offers an implementation of the paper, "[MIFA2Former]".
 
 
 ## Models
-##  Weights of Mamba2Former.
+##  Weights of MI2Former.
 (1) COCO entity train 
 | Alg | Train Data | Model and Config Url |
 | ------| ------| ------|
