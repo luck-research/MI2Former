@@ -8,7 +8,7 @@ This project offers an implementation of the paper, "[MIFA2Former]".
 </div><br/>
 
 ## News
-2026-05-10 The dataset, code and pretrained models are released.
+2026-06-15 The dataset, code and pretrained models are released.
 
 
 ## Models
