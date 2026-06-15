@@ -14,11 +14,24 @@ This project offers an implementation of the paper, "[MIFA2Former]".
 ## Models
 ##  Weights of MI2Former.
 (1) COCO entity train 
-| Alg | Train Data | Model and Config Url |
-| ------| ------| ------|
-| MIFA2Former | COCO Entity | [Google Drive](https://drive.google.com/drive/folders/1wdY1xDXH4JYyBesjAnTD2QsTONPUVEZz?usp=drive_link) |
-| MIFA2Former | EntitySeg Entity | [Google Drive](https://drive.google.com/drive/folders/1BCghu1TKMew7JaPKxPIJemiktT7WxwTU?usp=drive_link) |
+| Alg | Train Data | Model and Config Url | Ap_e |
+| ------| ------| ------|------|
+| MIFA2Former | COCO Entity | [Google Drive](https://drive.google.com/drive/folders/1wdY1xDXH4JYyBesjAnTD2QsTONPUVEZz?usp=drive_link) |40.3 |
+| MIFA2Former | EntitySeg Entity | [Google Drive](https://drive.google.com/drive/folders/1BCghu1TKMew7JaPKxPIJemiktT7WxwTU?usp=drive_link) | 42.7|
 
+
+(2) ADE20K
+| Alg | pre Train Data | Model and Config Url |
+| ------| ------| ------|
+| MIFA2Former | coco  | [Google Drive](-) |
+| MIFA2Former | coco | [Google Drive](-) |
+
+
+(3) CityScape
+| Alg | pre Train Data | Model and Config Url |
+| ------| ------| ------|
+| MIFA2Former | coco  | [Google Drive](-) |
+| MIFA2Former | coco | [Google Drive](-) |
 
 ## Data
 #### Coco entity dataset
