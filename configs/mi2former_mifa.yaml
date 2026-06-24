@@ -1,0 +1,72 @@
+_BASE_: Base-Mask2Former.yaml
+DATASETS:
+  TRAIN: ("entityv2_entity_train_01", "entityv2_entity_train_02", "entityv2_entity_train_03",)
+  TEST: ("entityv2_entity_val_all",)
+
+SOLVER:
+  STEPS: (91575, 99414)
+  MAX_ITER: 103125
+  IMS_PER_BATCH: 16
+  BASE_LR: 0.0001
+  CHECKPOINT_PERIOD: 5000
+
+MODEL:
+  BACKBONE:
+    NAME: "MIFA"
+  MIFA:
+    EMBED_DIM: 64
+    DEPTHS: [ 2, 4, 8, 4 ]
+    NUM_HEADS: [ 2, 4, 8, 16 ]
+    DROP_PATH_RATE: 0.2
+
+  META_ARCHITECTURE: "MaskFormer"
+  WEIGHTS: "mi2former_mifa.pth"
+
+  SEM_SEG_HEAD:
+    NAME: "MaskFormerHead"
+    IGNORE_VALUE: 255
+    NUM_CLASSES: 1
+    LOSS_WEIGHT: 1.0
+    CONVS_DIM: 256
+    MASK_DIM: 256
+    NORM: "GN"
+    # pixel decoder
+    PIXEL_DECODER_NAME: "HybridCrossScaleAttentionDecoder"
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    DEFORMABLE_TRANSFORMER_ENCODER_IN_FEATURES: ["res3", "res4", "res5"]
+    COMMON_STRIDE: 4
+
+  MASK_FORMER:
+    TRANSFORMER_DECODER_NAME: "MultiScaleMaskedTransformerDecoder"
+    TRANSFORMER_IN_FEATURE: "multi_scale_pixel_decoder"
+    DEEP_SUPERVISION: True
+    NO_OBJECT_WEIGHT: 0.1
+    CLASS_WEIGHT: 2.0
+    MASK_WEIGHT: 5.0
+    DICE_WEIGHT: 5.0
+    HIDDEN_DIM: 256
+    NUM_OBJECT_QUERIES: 100
+    NHEADS: 8
+    DROPOUT: 0.0
+    DIM_FEEDFORWARD: 2048
+    ENC_LAYERS: 0
+    PRE_NORM: False
+    ENFORCE_INPUT_PROJ: False
+    SIZE_DIVISIBILITY: 32
+    DEC_LAYERS: 10  # 9 decoder layers, add one for the loss on learnable query
+    TRAIN_NUM_POINTS: 12544
+    OVERSAMPLE_RATIO: 3.0
+    IMPORTANCE_SAMPLE_RATIO: 0.75
+    TEST:
+      SEMANTIC_ON: False
+      INSTANCE_ON: True
+      PANOPTIC_ON: False
+      OVERLAP_THRESHOLD: 0.8
+      OBJECT_MASK_THRESHOLD: 0.8
+INPUT:
+  IMAGE_SIZE: 1024
+  MIN_SCALE: 0.1
+  MAX_SCALE: 2.0
+  FORMAT: "RGB"
+  DATASET_MAPPER_NAME: "coco_instance_lsj"
+  

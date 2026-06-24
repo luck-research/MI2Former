@@ -19,95 +19,6 @@ from ..transformer_decoder.transformer import _get_clones, _get_activation_fn
 from .ops.modules import MSDeformAttn
 
 
-class HierarchicalOctaveBlock(torch.nn.Module):
-    '''Hierarchical Octave Block
-    '''
-    def __init__(self, in_dim_h, in_dim_m, in_dim_l, out_dim, kernel_size=3):
-        super().__init__()
-        # h pass
-        self.h2h_conv = Conv2d(in_dim_h, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=in_dim_h)
-        
-        self.h2m_pool = nn.AvgPool2d(kernel_size=(2, 2), stride=2, padding=0)
-        self.h2m_conv = Conv2d(in_dim_h, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=in_dim_h)
-
-        self.h2l_pool = nn.AvgPool2d(kernel_size=(4, 4), stride=4, padding=0)
-        self.h2l_conv = Conv2d(in_dim_h, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=in_dim_h)
-
-        # m pass
-        self.m2h_conv = Conv2d(in_dim_m, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=in_dim_m)
-        self.m2h_up = nn.Upsample(scale_factor=2, mode="nearest")
-
-        self.m2m_conv = Conv2d(in_dim_m, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=in_dim_m)
-
-        self.m2l_pool = nn.AvgPool2d(kernel_size=(2, 2), stride=2, padding=0)
-        self.m2l_conv = Conv2d(in_dim_m, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=in_dim_m)
-
-        # l pass
-        self.l2h_conv = Conv2d(in_dim_l, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=out_dim)
-        self.l2h_up = nn.Upsample(scale_factor=4, mode="nearest")
-        
-        self.l2m_conv = Conv2d(in_dim_l, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=out_dim)
-        self.l2m_up = nn.Upsample(scale_factor=2, mode="nearest")
-        
-        self.l2l_conv = Conv2d(in_dim_l, out_dim, kernel_size=kernel_size, padding=1, bias=False, groups=out_dim)
-
-        # norm
-        self.norm_h = nn.GroupNorm(out_dim // 8, out_dim)
-        self.norm_m = nn.GroupNorm(out_dim // 8, out_dim)
-        self.norm_l = nn.GroupNorm(out_dim // 8, out_dim)
-
-        self.apply(self._init_weights)
-
-    def _init_weights(self, m):
-        if isinstance(m, nn.Conv2d):
-            nn.init.kaiming_uniform_(m.weight, a=1)
-            if m.bias is not None:
-                nn.init.constant_(m.bias, 0)
-        elif isinstance(m, nn.GroupNorm):
-            nn.init.constant_(m.bias, 0)
-            nn.init.constant_(m.weight, 1.0)
-
-    def forward(self, input_h, input_m, input_l):
-        # High branch
-        h_to_h = self.h2h_conv(input_h)
-
-        h_to_m = self.h2m_pool(input_h)
-        h_to_m = self.h2m_conv(h_to_m)
-
-        h_to_l = self.h2l_pool(input_h)
-        h_to_l = self.h2l_conv(h_to_l)
-
-        # middle branch
-        m_to_h = self.m2h_conv(input_m)
-        m_to_h = self.m2h_up(m_to_h)
-
-        m_to_m = self.m2m_conv(input_m)
-
-        m_to_l = self.m2l_pool(input_m)
-        m_to_l = self.m2l_conv(m_to_l)
-
-        # Low branch
-        l_to_h = self.l2h_conv(input_l)
-        l_to_h = self.l2h_up(l_to_h)
-
-        l_to_m = self.l2m_conv(input_l)
-        l_to_m = self.l2m_up(l_to_m)
-
-        l_to_l = self.l2l_conv(input_l)
-
-        # merge
-        h_to_h = h_to_h + m_to_h + l_to_h
-        m_to_m = h_to_m + m_to_m + l_to_m
-        l_to_l = h_to_l + m_to_l + l_to_l
-
-        # norm
-        h_to_h = self.norm_h(h_to_h)
-        m_to_m = self.norm_m(m_to_m)
-        l_to_l = self.norm_l(l_to_l)
-
-        return h_to_h, m_to_m, l_to_l
- 
-
 # MSDeformAttn Transformer encoder in deformable detr
 class MSDeformAttnTransformerEncoderOnly(nn.Module):
     def __init__(self, d_model=256, nhead=8,
@@ -298,17 +209,25 @@ class MSDeformAttnPixelDecoder(nn.Module):
         self.transformer_feature_strides = [v.stride for k, v in transformer_input_shape]  # to decide extra FPN layers
 
         self.transformer_num_feature_levels = len(self.transformer_in_features)
-        # multi scale feature merge
-        assert self.transformer_num_feature_levels == 3
-        
-        # HOFL
-        self.res3_end3h = HierarchicalOctaveBlock(transformer_in_channels[0], transformer_in_channels[1], transformer_in_channels[2], conv_dim)
-        self.res4_end3m = HierarchicalOctaveBlock(transformer_in_channels[0], transformer_in_channels[1], transformer_in_channels[2], conv_dim)
-        self.res5_end3l = HierarchicalOctaveBlock(transformer_in_channels[0], transformer_in_channels[1], transformer_in_channels[2], conv_dim)
-        conv_norm = get_norm("GN", conv_dim)
-        self.res3_concat_conv = Conv2d(conv_dim * 3, conv_dim, kernel_size=1, bias=False, norm=conv_norm)
-        self.res4_concat_conv = Conv2d(conv_dim * 3, conv_dim, kernel_size=1, bias=False, norm=conv_norm)
-        self.res5_concat_conv = Conv2d(conv_dim * 3, conv_dim, kernel_size=1, bias=False, norm=conv_norm)
+        if self.transformer_num_feature_levels > 1:
+            input_proj_list = []
+            # from low resolution to high resolution (res5 -> res2)
+            for in_channels in transformer_in_channels[::-1]:
+                input_proj_list.append(nn.Sequential(
+                    nn.Conv2d(in_channels, conv_dim, kernel_size=1),
+                    nn.GroupNorm(32, conv_dim),
+                ))
+            self.input_proj = nn.ModuleList(input_proj_list)
+        else:
+            self.input_proj = nn.ModuleList([
+                nn.Sequential(
+                    nn.Conv2d(transformer_in_channels[-1], conv_dim, kernel_size=1),
+                    nn.GroupNorm(32, conv_dim),
+                )])
+
+        for proj in self.input_proj:
+            nn.init.xavier_uniform_(proj[0].weight, gain=1)
+            nn.init.constant_(proj[0].bias, 0)
 
         self.transformer = MSDeformAttnTransformerEncoderOnly(
             d_model=conv_dim,
@@ -339,7 +258,6 @@ class MSDeformAttnPixelDecoder(nn.Module):
         stride = min(self.transformer_feature_strides)
         self.num_fpn_levels = int(np.log2(stride) - np.log2(self.common_stride))
 
-        
         lateral_convs = []
         output_convs = []
 
@@ -398,23 +316,10 @@ class MSDeformAttnPixelDecoder(nn.Module):
         srcs = []
         pos = []
         # Reverse feature maps into top-down order (from low to high resolution)
-        # multi scale features merge layer
-
-        res5_3, res5_4, res5_5 = self.res5_end3l(features["res3"], features["res4"], features["res5"])
-        res4_3, res4_4, res4_5 = self.res4_end3m(features["res3"], features["res4"], features["res5"])
-        res3_3, res3_4, res3_5 = self.res3_end3h(features["res3"], features["res4"], features["res5"])
-
-        res5 = self.res5_concat_conv(torch.concat([res5_5, res4_5, res3_5], dim=1))
-        res4 = self.res4_concat_conv(torch.concat([res5_4, res4_4, res3_4], dim=1))
-        res3 = self.res3_concat_conv(torch.concat([res5_3, res4_3, res3_3], dim=1))
-
-        srcs.append(res5)
-        pos.append(self.pe_layer(res5))
-        srcs.append(res4)
-        pos.append(self.pe_layer(res4))
-        srcs.append(res3)
-        pos.append(self.pe_layer(res3))
-
+        for idx, f in enumerate(self.transformer_in_features[::-1]):
+            x = features[f].float()  # deformable detr does not support half precision
+            srcs.append(self.input_proj[idx](x))
+            pos.append(self.pe_layer(x))
 
         y, spatial_shapes, level_start_index = self.transformer(srcs, pos)
         bs = y.shape[0]
@@ -441,7 +346,6 @@ class MSDeformAttnPixelDecoder(nn.Module):
             output_conv = self.output_convs[idx]
             cur_fpn = lateral_conv(x)
             # Following FPN implementation, we use nearest upsampling here
-            
             y = cur_fpn + F.interpolate(out[-1], size=cur_fpn.shape[-2:], mode="bilinear", align_corners=False)
             y = output_conv(y)
             out.append(y)

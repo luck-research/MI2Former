@@ -138,64 +138,9 @@ def add_maskformer2_config(cfg):
     cfg.MODEL.HORNET.DROP_PATH_RATE=0.6
     cfg.MODEL.HORNET.OUT_FEATURES = ["res2", "res3", "res4", "res5"]
 
-    ## efficientVMamba backbone
-    cfg.MODEL.VSSM = CN()
-    cfg.MODEL.VSSM.DROP_PATH_RATE = 0.2
-    cfg.MODEL.VSSM.PATCH_SIZE = 4
-    cfg.MODEL.VSSM.SHARED_SSM = False
-    cfg.MODEL.VSSM.SOFTMAX = False
-    cfg.MODEL.VSSM.PATCH_NORM = True
-    cfg.MODEL.VSSM.IN_CHANS = 3
-    cfg.MODEL.VSSM.EMBED_DIM = 96
-    cfg.MODEL.VSSM.DEPTHS = [2, 2, 9, 2]
-    cfg.MODEL.VSSM.D_STATE = 16
-    cfg.MODEL.VSSM.DT_RANK = "auto"
-    cfg.MODEL.VSSM.SSM_RATIO = 2.0
-    cfg.MODEL.VSSM.MLP_RATIO = 4.0
-    cfg.MODEL.VSSM.DOWNSAMPLE = "v2"
-    cfg.MODEL.VSSM.WINDOWSIZE = 2
-    cfg.MODEL.VSSM.OUT_FEATURES = ["res2", "res3", "res4", "res5"]
-
-    ## OVDIO
-    cfg.MODEL.OVDINO = CN()
-    cfg.MODEL.OVDINO.IN_FEATURES = ["res3", "res4", "res5"]
-    cfg.MODEL.OVDINO.USE_ENCODER_IDX = [2]
-    cfg.MODEL.OVDINO.NUM_ENCODER_LAYER = 1
-    cfg.MODEL.OVDINO.IN_CHANNELS = [96, 192, 384]
-    cfg.MODEL.OVDINO.FPN_IN_CHANNELS = [96, 192, 384]
-    cfg.MODEL.OVDINO.FPN_OUT_CHANNELS = 256
-    cfg.MODEL.OVDINO.FPN_EXPANSION = 1.0
-    cfg.MODEL.OVDINO.LAYER_ATTEN_EMBED_DIMS = 256
-    cfg.MODEL.OVDINO.LAYER_ATTEN_NUM_HEADS = 8
-    cfg.MODEL.OVDINO.LAYER_ATTEN_DROPOUT = 0.0
-    cfg.MODEL.OVDINO.LAYER_FFN_EMBED_DIMS = 256
-    cfg.MODEL.OVDINO.LAYER_FFN_FFD_CHANNELS = 1024
-    cfg.MODEL.OVDINO.LAYER_FFN_DROP = 0.0
-
-    ## mobile mamba, b1
-    cfg.MODEL.MOMAMBA = CN()
-    cfg.MODEL.MOMAMBA.STAGES = ['s', 's', 's', 's']
-    cfg.MODEL.MOMAMBA.EMBED_DIM = [200, 376, 448]
-    cfg.MODEL.MOMAMBA.GLOBAL_RATIO = [0.8, 0.7, 0.6]
-    cfg.MODEL.MOMAMBA.LOCAL_RATIO = [0.2, 0.2, 0.3]
-    cfg.MODEL.MOMAMBA.DEPTH = [2, 3, 2]
-    cfg.MODEL.MOMAMBA.KERNELS = [7, 5, 3]
-    cfg.MODEL.MOMAMBA.DOWN_OPS = [['subsample', 2], ['subsample', 2], ['subsample', 2], ['']]
-    cfg.MODEL.MOMAMBA.DROP_PATH = 0.0
-    cfg.MODEL.MOMAMBA.SSM_RATIO = 2
-    cfg.MODEL.MOMAMBA.OUT_INDICES = (1,2,3)
-
-    ## sparx mamba tiny
-    cfg.MODEL.SPARXMAMBA = CN()
-    cfg.MODEL.SPARXMAMBA.TYPE = "t"
-    cfg.MODEL.SPARXMAMBA.DEPTHS = [2, 2, 7, 2]
-    cfg.MODEL.SPARXMAMBA.DIMS = [96, 192, 320, 512]
-    cfg.MODEL.SPARXMAMBA.SR_RATIO = [8, 4, 2, 1]
-    cfg.MODEL.SPARXMAMBA.STEM_TYPE = "v1"
-
-    ## mlla tiny
-    cfg.MODEL.MLLA = CN()
-    cfg.MODEL.MLLA.DROP_PATH_RATE = 0.2
-    cfg.MODEL.MLLA.EMBED_DIM = 64
-    cfg.MODEL.MLLA.DEPTHS = [ 2, 4, 8, 4 ]
-    cfg.MODEL.MLLA.NUM_HEADS = [ 2, 4, 8, 16 ]
+    ## mifa
+    cfg.MODEL.MIFA = CN()
+    cfg.MODEL.MIFA.DROP_PATH_RATE = 0.2
+    cfg.MODEL.MIFA.EMBED_DIM = 64
+    cfg.MODEL.MIFA.DEPTHS = [ 2, 4, 8, 4 ]
+    cfg.MODEL.MIFA.NUM_HEADS = [ 2, 4, 8, 16 ]

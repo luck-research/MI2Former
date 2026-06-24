@@ -45,7 +45,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description="maskformer2 demo for builtin configs")
     parser.add_argument(
         "--config-file",
-        default="configs/coco/panoptic-segmentation/maskformer2_R50_bs16_50ep.yaml",
+        default="configs/mi2former_mifa.yaml",
         metavar="FILE",
         help="path to config file",
     )
@@ -54,11 +54,13 @@ def get_parser():
     parser.add_argument(
         "--input",
         nargs="+",
+        default=["examples/images/coco_000000093437.jpg", "examples/images/ADE_val_00001055.jpg"],
         help="A list of space separated input images; "
         "or a single glob pattern such as 'directory/*.jpg'",
     )
     parser.add_argument(
         "--output",
+        default="examples/results",
         help="A file or directory to save output visualizations. "
         "If not given, will show output in an OpenCV window.",
     )

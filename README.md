@@ -4,7 +4,7 @@ Efficient Entity Segmentation with Mamba-Driven Lightweight Design
 This project offers an implementation of the paper, "[MIFA2Former]". 
 
 <div align="center">
-  <img src="main_arch_v3.png" width="90%"/>
+  <img src="main_arch.png" width="90%"/>
 </div><br/>
 
 ## News
@@ -16,22 +16,22 @@ This project offers an implementation of the paper, "[MIFA2Former]".
 (1) COCO Entity And EntitySeg Entity
 | Alg | Train Data | Model and Config Url | Ap_e |
 | ------| ------| ------|------|
-| MIFA2Former | COCO Entity | [Google Drive](https://drive.google.com/drive/folders/1wdY1xDXH4JYyBesjAnTD2QsTONPUVEZz?usp=drive_link) |40.3 |
-| MIFA2Former | EntitySeg Entity | [Google Drive](https://drive.google.com/drive/folders/1BCghu1TKMew7JaPKxPIJemiktT7WxwTU?usp=drive_link) | 42.7|
+| MI2Former | COCO Entity | [Google Drive](https://drive.google.com/drive/folders/1wdY1xDXH4JYyBesjAnTD2QsTONPUVEZz?usp=drive_link) |40.3 |
+| MI2Former | EntitySeg Entity | [Google Drive](https://drive.google.com/drive/folders/1BCghu1TKMew7JaPKxPIJemiktT7WxwTU?usp=drive_link) | 42.7|
 
 
 (2) ADE20K
 | Alg | pre Train Data | Model and Config Url |
 | ------| ------| ------|
-| MIFA2Former | coco  | [Google Drive](will be soon) |
-| MIFA2Former | coco | [Google Drive](will be soon) |
+| MI2Former | coco  | [Google Drive](will be soon) |
+| MI2Former | coco | [Google Drive](will be soon) |
 
 
 (3) CityScape
 | Alg | pre Train Data | Model and Config Url |
 | ------| ------| ------|
-| MIFA2Former | coco  | [Google Drive](will be soon) |
-| MIFA2Former | coco | [Google Drive](will be soon) |
+| MI2Former | coco  | [Google Drive](will be soon) |
+| MI2Former | coco | [Google Drive](will be soon) |
 
 
 ## Comparison of Different Models on COCO Entity
@@ -121,7 +121,7 @@ python3 projects/MIFA2Former/demo_result_and_vis.py --config-file projects/MIFA2
 
 ## Params and Flops
 <div align="center">
-  <img src="ours.png" width="90%"/>
+  <img src="params.png" width="90%"/>
 </div><br/>
 
 

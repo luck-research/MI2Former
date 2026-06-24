@@ -135,12 +135,9 @@ if __name__ == "__main__":
 Examples:
 To show parameters of a model:
 $ ./analyze_model.py --tasks parameter \\
-    --config-file ../configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml
+    --config-file ./configs/mask_rcnn_R_50_FPN_1x.yaml
 Flops and activations are data-dependent, therefore inputs and model weights
 are needed to count them:
-$ ./analyze_model.py --num-inputs 100 --tasks flop \\
-    --config-file ../configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml \\
-    MODEL.WEIGHTS /path/to/model.pkl
 """
     )
     parser.add_argument(

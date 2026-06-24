@@ -1,13 +1,3 @@
-# --------------------------------------------------------
-# Swin Transformer
-# Copyright (c) 2021 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
-# Written by Ze Liu, Yutong Lin, Yixuan Wei
-# --------------------------------------------------------
-
-# Copyright (c) Facebook, Inc. and its affiliates.
-# Modified by Bowen Cheng from https://github.com/SwinTransformer/Swin-Transformer-Semantic-Segmentation/blob/main/mmseg/models/backbones/swin_transformer.py
-
 import numpy as np
 import torch
 import torch.nn as nn
@@ -20,10 +10,10 @@ from .backbone_mifa import MIFAABackbone
 @BACKBONE_REGISTRY.register()
 class MIFA(MIFAABackbone, Backbone):
     def __init__(self, config, input_shape):
-        super().__init__(embed_dim=config.MODEL.MLLA.EMBED_DIM,
-                         depths=config.MODEL.MLLA.DEPTHS,
-                         num_heads=config.MODEL.MLLA.NUM_HEADS,
-                         drop_path_rate=config.MODEL.MLLA.DROP_PATH_RATE,
+        super().__init__(embed_dim=config.MODEL.MIFA.EMBED_DIM,
+                         depths=config.MODEL.MIFA.DEPTHS,
+                         num_heads=config.MODEL.MIFA.NUM_HEADS,
+                         drop_path_rate=config.MODEL.MIFA.DROP_PATH_RATE,
                          img_size=config.INPUT.IMAGE_SIZE
                         )
 

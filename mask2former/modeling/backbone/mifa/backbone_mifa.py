@@ -1,14 +1,3 @@
-# --------------------------------------------------------
-# Swin Transformer
-# Copyright (c) 2021 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
-# Written by Ze Liu
-# --------------------------------------------------------
-# Demystify Mamba in Vision: A Linear Attention Perspective
-# Modified by Dongchen Han
-# -----------------------------------------------------------------------
-
-
 import torch
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
@@ -335,7 +324,7 @@ class PatchMerging(nn.Module):
 
 
 class BasicLayer(nn.Module):
-    """ A basic MLLA layer for one stage.
+    """ A basic MIFA layer for one stage.
 
     Args:
         dim (int): Number of input channels.
